@@ -1,0 +1,16 @@
+# Render Blueprint: New > Blueprint > pick this repo. Free plan, HTTPS URL
+# like https://beethoven-assistant.onrender.com (microphone needs HTTPS).
+services:
+  - type: web
+    name: beethoven-assistant
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT --proxy-headers
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.11
+      - key: MAX_PROJECTS
+        value: "200"

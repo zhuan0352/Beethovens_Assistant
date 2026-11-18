@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Beethoven Assistant</title>
+    <meta name="description" content="Hum a melody idea and hear it as a produced track in four arrangements." />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23131110'/%3E%3Cpath d='M5 17c3-9 5-9 7 0s4 9 6 0 4-9 6 0' fill='none' stroke='%23e8b25e' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="top">
+      <a class="brand" href="#" id="brand" aria-label="Beethoven Assistant — start over">
+        <svg viewBox="0 0 32 20" aria-hidden="true">
+          <path d="M2 11c3.2-11 5.6-11 8 0s4.8 11 7 0 4.4-9 6.4-2 3.4 5 6.6 1" />
+        </svg>
+        <span>Beethoven <em>Assistant</em></span>
+      </a>
+      <button class="ghost" id="new-idea" hidden>New idea</button>
+    </header>
+
+    <main>
+      <!-- 1. Capture -->
+      <section class="capture" id="capture">
+        <h1>Hum it. Hear it four&nbsp;ways.</h1>
+        <p class="lede">
+          Record a melody idea and get it back as a produced track — piano, guitar, synth and
+          orchestral — lined up so you can switch between them mid-playback.
+        </p>
+
+        <div class="recorder">
+          <canvas id="live" class="live" aria-hidden="true"></canvas>
+          <button class="rec" id="rec" aria-label="Start recording" aria-pressed="false">
+            <span class="rec-shape"></span>
+          </button>
+          <p class="rec-status" id="rec-status" aria-live="polite">Press to record. 5–30 seconds of humming works best.</p>
+        </div>
+
+        <div class="alt">
+          <button class="ghost" id="upload">Upload audio</button>
+          <input type="file" id="file" accept="audio/*,.wav,.mp3,.m4a,.ogg,.webm" hidden />
+          <button class="ghost" id="demo">Try a demo hum</button>
+        </div>
+        <p class="error" id="capture-error" role="alert" hidden></p>
+      </section>
+
+      <!-- 2. Working -->
+      <section class="working" id="working" hidden aria-live="polite">
+        <h2 id="working-title">Listening to your take…</h2>
+        <ol class="steps" id="steps"></ol>
+      </section>
+
+      <!-- 3. Workspace -->
+      <section class="workspace" id="workspace" hidden>
+        <div class="panel melody">
+          <div class="panel-head">
+            <div>
+              <h2>Your melody</h2>
+              <p class="sub" id="melody-facts"></p>
+            </div>
+            <button class="ghost small" id="play-hum" aria-pressed="false">Play my hum</button>
+          </div>
+
+          <div class="settings">
+            <label class="field">
+              <span>Key</span>
+              <select id="key"></select>
+            </label>
+            <div class="field">
+              <span id="tempo-label">Tempo</span>
+              <div class="tempo">
+                <button class="chip" id="tempo-half" title="Half time">½×</button>
+                <input id="bpm" type="number" min="40" max="240" step="1" inputmode="numeric" aria-labelledby="tempo-label" />
+                <span class="unit">BPM</span>
+                <button class="chip" id="tempo-double" title="Double time">2×</button>
+              </div>
+            </div>
+            <div class="field">
+              <span id="metre-label">Metre</span>
+              <div class="segmented" role="group" aria-labelledby="metre-label">
+                <button data-bpb="4" aria-pressed="true">4/4</button>
+                <button data-bpb="3" aria-pressed="false">3/4</button>
+              </div>
+            </div>
+            <button class="ghost small" id="reset-settings" hidden>Reset to detected</button>
+          </div>
+
+          <canvas id="roll" class="roll" role="img" aria-label="Piano roll of the detected melody"></canvas>
+          <p class="error" id="workspace-error" role="alert" hidden></p>
+        </div>
+
+        <div class="versions-head">
+          <h2>Versions</h2>
+          <p class="sub">Same melody, same chords. Press <kbd>1</kbd>–<kbd>4</kbd> to switch while it plays, <kbd>Space</kbd> to play or pause.</p>
+        </div>
+        <div class="versions" id="versions"></div>
+      </section>
+    </main>
+
+    <!-- Transport -->
+    <footer class="transport" id="transport" hidden>
+      <button class="play" id="play" aria-label="Play">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path id="play-icon" d="M7 4.5v15l13-7.5z" /></svg>
+      </button>
+      <div class="now">
+        <span class="now-style" id="now-style"></span>
+        <span class="time" id="time">0:00 / 0:00</span>
+      </div>
+      <input type="range" id="seek" class="seek" min="0" max="1000" value="0" aria-label="Position" />
+      <button class="chip" id="loop" aria-pressed="false" title="Loop">Loop</button>
+    </footer>
+
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
